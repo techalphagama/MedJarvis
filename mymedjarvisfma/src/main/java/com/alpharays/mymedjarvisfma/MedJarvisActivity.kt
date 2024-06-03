@@ -7,6 +7,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
+import com.alpharays.mymedjarvisfma.integration.MedJarvisDependencyProvider
+import com.alpharays.mymedjarvisfma.integration.MedJarvisFeatureImpl
 import com.alpharays.mymedjarvisfma.ui.theme.MedJarvisTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -14,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MedJarvisActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        MedJarvisDependencyProvider.provideImpl(medJarvisFeatureApi = MedJarvisFeatureImpl())
         enableEdgeToEdge()
         setContent {
             MedJarvisTheme {
