@@ -113,6 +113,9 @@ dependencies {
     // Coil
     implementation("io.coil-kt:coil-compose:2.4.0")
 
+    //geminiapi
+    implementation("com.google.ai.client.generativeai:generativeai:0.1.1")
+
 }
 
 // Allow references to generated code
