@@ -5,10 +5,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.alpharays.mymedjarvisfma.integration.MedJarvisDependencyProvider
 import com.alpharays.mymedjarvisfma.integration.MedJarvisFeatureImpl
+import com.alpharays.mymedjarvisfma.presentation.AppContent
 import com.alpharays.mymedjarvisfma.ui.theme.MedJarvisTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,8 +23,11 @@ class MedJarvisActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             MedJarvisTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    //   AppContent()
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = MaterialTheme.colorScheme.background
+                ) {
+                    AppContent()
                 }
             }
         }

@@ -4,6 +4,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.alpharays.mymedjarvisfma.presentation.chatscreen.ChatScreen
 
 private const val baseRoute = "jarvis_screen"
 
@@ -17,7 +18,7 @@ class MedJarvisFeatureImpl : MedJarvisFeatureApi {
         modifier: Modifier
     ) {
         navGraphBuilder.composable(medJarvisRoute) {
-            //  CommunityScreen(navController = navController)
+            ChatScreen()
         }
     }
 }
