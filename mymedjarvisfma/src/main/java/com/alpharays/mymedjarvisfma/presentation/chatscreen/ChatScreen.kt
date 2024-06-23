@@ -2,6 +2,7 @@ package com.alpharays.mymedjarvisfma.presentation.chatscreen
 
 import android.graphics.Bitmap
 import android.net.Uri
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,6 +44,7 @@ fun ChatScreen(
 }
 
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
     promptResponse: Response<Pair<String?, Bitmap?>>?,

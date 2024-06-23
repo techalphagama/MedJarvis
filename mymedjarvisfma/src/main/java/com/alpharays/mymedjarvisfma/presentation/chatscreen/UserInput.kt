@@ -1,5 +1,7 @@
 package com.alpharays.mymedjarvisfma.presentation.chatscreen
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -25,6 +27,7 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Camera
 import androidx.compose.material.icons.filled.Image
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Card
@@ -46,22 +49,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import com.alpharays.mymedjarvisfma.data.UriCustomSaver
+import java.io.File
+import java.util.UUID
 
+@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 fun UserInputPreview() {
     UserInput(onMessageSent = { it, it1 -> })
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@ExperimentalFoundationApi
 @Composable
 fun UserInput(
     onMessageSent: (String, MutableList<Uri>) -> Unit,
@@ -70,18 +79,34 @@ fun UserInput(
     val imageUris = rememberSaveable(saver = UriCustomSaver()) {
         mutableStateListOf()
     }
+    var imageUri by rememberSaveable { mutableStateOf<Uri?>(null) }
+    val context = LocalContext.current
 
-    val pickMediaLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { imageUri ->
-            imageUri?.let {
-                imageUris.clear() // added for single image
-                imageUris.add(it)
-            }
+    val pickMediaLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) { result ->
+
+        result?.let {
+            imageUris.clear()  // Clear for single image selection
+            imageUris.add(it)
         }
+
+    }
+
+    // Activity result launcher for taking picture from camera
+    val takePictureLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicture()
+    ) { isTaken ->
+        if (isTaken) {
+            imageUris.add(imageUri!!)
+        }
+    }
+
 
     var textState by rememberSaveable(stateSaver = TextFieldValue.Saver) {
         mutableStateOf(TextFieldValue())
     }
+
 
     Surface(tonalElevation = 2.dp, contentColor = MaterialTheme.colorScheme.secondary) {
         Column {
@@ -92,7 +117,15 @@ fun UserInput(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 UserInputSelector(
-                    onClick = {
+                    onClickCamera = {
+                        imageUri = FileProvider.getUriForFile(
+                            context,
+                            "${context.packageName}.fileprovider",
+                            File(context.cacheDir, "temp_image_${UUID.randomUUID()}.jpg")
+                        )
+                        takePictureLauncher.launch(imageUri)
+                    },
+                    onClickGallery = {
                         pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
                     }
                 )
@@ -116,6 +149,7 @@ fun UserInput(
         }
     }
 }
+
 
 @ExperimentalFoundationApi
 @Composable
@@ -197,7 +231,8 @@ private fun UserInputTextField(
 
 @Composable
 fun UserInputSelector(
-    onClick: () -> Unit,
+    onClickCamera: () -> Unit,
+    onClickGallery: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -207,7 +242,12 @@ fun UserInputSelector(
     ) {
 
         SelectorButton(
-            onClick = onClick,
+            onClick = onClickCamera,
+            icon = Icons.Filled.Camera,
+            description = "capture_photo_desc" // Update description for camera
+        )
+        SelectorButton(
+            onClick = onClickGallery,
             icon = Icons.Filled.Image,
             description = "attach_photo_desc"
         )
