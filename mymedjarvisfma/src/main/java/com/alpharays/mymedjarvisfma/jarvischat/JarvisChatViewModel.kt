@@ -25,10 +25,10 @@ import javax.inject.Inject
 class JarvisChatViewModel @Inject constructor(
     @JarvisChatModule.GeminiProVision private val geminiProVision: GenerativeModel,
     @JarvisChatModule.GeminiPro private val geminiPro: GenerativeModel,
-    private val application: Application
+    application: Application
 ) : ViewModel() {
-    val imageRequestBuilder = ImageRequest.Builder(context = application)
-    val imageLoader = ImageLoader.Builder(application).build()
+    private val imageRequestBuilder = ImageRequest.Builder(context = application)
+    private val imageLoader = ImageLoader.Builder(application).build()
 
     private val _promptResponse = MutableStateFlow<Response<Pair<String?, Bitmap?>>?>(null)
     val promptResponse: StateFlow<Response<Pair<String?, Bitmap?>>?>
@@ -63,7 +63,7 @@ class JarvisChatViewModel @Inject constructor(
                         bitmap = compressBitmap(it)
                         image(bitmap ?: compressBitmap(it))
                     }
-                    text(if (message.isNullOrBlank()) "describe image" else message)
+                    text(if (message.isNullOrBlank()) "If the image is related to healthcare or medicine then please describe about it else please say that it is not related to healthcare or medicine" else message)
                 }
 
                 var output = ""
