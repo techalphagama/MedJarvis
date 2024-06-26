@@ -74,9 +74,9 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(it)
         ) {
-            when (promptResponse) {
-                is Response.Loading -> LoadingScreen()
-                is Response.Success, is Response.Failure, null -> ChatListScreen(chatItems)
+            ChatListScreen(chatItems = chatItems)
+            if (promptResponse is Response.Loading) {
+                LoadingScreen()
             }
         }
     }
@@ -96,7 +96,7 @@ fun LoadingScreen() {
 fun ChatItem(promptResponse: Pair<String?, Bitmap?>) {
     Card(
         modifier = Modifier
-            .padding(vertical = 16.dp)
+            .padding(vertical = 8.dp)
             .fillMaxWidth(),
         shape = MaterialTheme.shapes.large
     ) {
@@ -122,9 +122,9 @@ fun ChatItem(promptResponse: Pair<String?, Bitmap?>) {
 }
 
 @Composable
-fun ChatListScreen(items: List<Pair<String?, Bitmap?>>) {
+fun ChatListScreen(chatItems: List<Pair<String?, Bitmap?>>) {
     LazyColumn {
-        items(items) { item ->
+        items(chatItems) { item ->
             ChatItem(promptResponse = item)
         }
     }
