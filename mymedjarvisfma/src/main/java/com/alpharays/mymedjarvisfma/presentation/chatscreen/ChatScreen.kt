@@ -1,6 +1,9 @@
 package com.alpharays.mymedjarvisfma.presentation.chatscreen
 
+import android.content.ContentResolver
+import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
@@ -24,11 +27,14 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.alpharays.mymedjarvisfma.MedJarvisRouter
 import com.alpharays.mymedjarvisfma.data.Response
 import com.alpharays.mymedjarvisfma.jarvischat.JarvisChatViewModel
+import java.io.InputStream
 
 @Composable
 fun ChatScreen(
@@ -46,11 +52,31 @@ fun ChatScreen(
         chatItems = chatItems,
         promptResponse = promptResponse,
         onMessageSent = { inputText, selectedItems ->
-            viewModel.sendPrompt(message = inputText, pickUri = selectedItems)
-            selectedItems.clear()
-            chatItems.add(Pair(inputText, null))
+            val selectedImageUri = selectedItems.firstOrNull()
+            if (selectedImageUri != null) {
+                viewModel.sendPrompt(message = inputText, pickUri = selectedItems)
+                selectedItems.clear()
+                val bitmap = getBitmapFromUri(selectedImageUri)
+                chatItems.add(Pair(inputText, bitmap))
+            } else {
+                viewModel.sendPrompt(message = inputText, pickUri = selectedItems)
+                chatItems.add(Pair(inputText, null))
+            }
         }
     )
+}
+
+private fun getBitmapFromUri(uri: Uri): Bitmap? {
+    val context: Context? = MedJarvisRouter.context
+
+    return try {
+        val contentResolver: ContentResolver? = context?.contentResolver
+        val inputStream: InputStream? = contentResolver?.openInputStream(uri)
+        BitmapFactory.decodeStream(inputStream)
+    } catch (e: Exception) {
+        e.printStackTrace()
+        null
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)

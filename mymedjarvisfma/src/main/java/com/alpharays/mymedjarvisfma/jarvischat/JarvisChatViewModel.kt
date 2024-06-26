@@ -37,7 +37,6 @@ class JarvisChatViewModel @Inject constructor(
     fun sendPrompt(message: String?, pickUri: MutableList<Uri>) {
         _promptResponse.value = Response.Loading
         viewModelScope.launch {
-
             val bitmaps = pickUri.mapNotNull {
                 val imageRequest = imageRequestBuilder
                     .data(it)
@@ -51,16 +50,16 @@ class JarvisChatViewModel @Inject constructor(
                     return@mapNotNull null
                 }
             }
+
             if (!message.isNullOrBlank() && bitmaps.isEmpty()) {
                 val contents = geminiPro.startChat().sendMessage(message)
                 contents.text?.let {
                     _promptResponse.value = Response.Success(Pair(it, null))
                 }
             } else if (bitmaps.isNotEmpty()) {
-                var bitmap: Bitmap? = null
+                val bitmap = bitmaps.firstOrNull()
                 val inputContent = content {
                     bitmaps.forEach {
-                        bitmap = compressBitmap(it)
                         image(bitmap ?: compressBitmap(it))
                     }
                     text(if (message.isNullOrBlank()) "If the image is related to healthcare or medicine then please describe about it else please say that it is not related to healthcare or medicine" else message)
@@ -76,6 +75,7 @@ class JarvisChatViewModel @Inject constructor(
             }
         }
     }
+
 }
 
 private fun compressBitmap(bitmap: Bitmap): Bitmap {
