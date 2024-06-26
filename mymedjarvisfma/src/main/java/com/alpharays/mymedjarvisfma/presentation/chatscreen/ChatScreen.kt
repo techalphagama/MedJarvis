@@ -33,6 +33,7 @@ import coil.compose.AsyncImage
 import com.alpharays.mymedjarvisfma.MedJarvisRouter
 import com.alpharays.mymedjarvisfma.data.Response
 import com.alpharays.mymedjarvisfma.jarvischat.JarvisChatViewModel
+import com.alpharays.mymedjarvisfma.model.ChatItemModel
 import java.io.InputStream
 
 @Composable
@@ -40,11 +41,11 @@ fun ChatScreen(
     viewModel: JarvisChatViewModel = hiltViewModel()
 ) {
     val promptResponse by viewModel.promptResponse.collectAsState()
-    val chatItems = remember { mutableStateListOf<Pair<String?, Bitmap?>>() }
+    val chatItems = remember { mutableStateListOf<ChatItemModel>() }
 
     // Update chatItems when promptResponse changes
     if (promptResponse is Response.Success) {
-        (promptResponse as Response.Success<Pair<String?, Bitmap?>>).data?.let { chatItems.add(it) }
+        (promptResponse as Response.Success<ChatItemModel>).data?.let { chatItems.add(it) }
     }
 
     MainScreen(
@@ -52,14 +53,15 @@ fun ChatScreen(
         promptResponse = promptResponse,
         onMessageSent = { inputText, selectedItems ->
             val selectedImageUri = selectedItems.firstOrNull()
+            val chatItemModel = ChatItemModel(message = inputText, isBot = true, image = null)
             if (selectedImageUri != null) {
                 viewModel.sendPrompt(message = inputText, pickUri = selectedItems)
                 selectedItems.clear()
                 val bitmap = getBitmapFromUri(selectedImageUri)
-                chatItems.add(Pair(inputText, bitmap))
+                chatItems.add(chatItemModel)
             } else {
                 viewModel.sendPrompt(message = inputText, pickUri = selectedItems)
-                chatItems.add(Pair(inputText, null))
+                chatItems.add(chatItemModel)
             }
         }
     )
@@ -81,8 +83,8 @@ private fun getBitmapFromUri(uri: Uri): Bitmap? {
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
-    chatItems: List<Pair<String?, Bitmap?>>,
-    promptResponse: Response<Pair<String?, Bitmap?>>?,
+    chatItems: List<ChatItemModel>,
+    promptResponse: Response<ChatItemModel>?,
     onMessageSent: (String, MutableList<Uri>) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -118,7 +120,7 @@ fun LoadingScreen() {
 }
 
 @Composable
-fun ChatItem(promptResponse: Pair<String?, Bitmap?>) {
+fun ChatItem(promptResponse: ChatItemModel) {
     Card(
         modifier = Modifier
             .padding(vertical = 8.dp)
@@ -129,7 +131,7 @@ fun ChatItem(promptResponse: Pair<String?, Bitmap?>) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            promptResponse.second?.let { bitmap ->
+            promptResponse.image?.let { bitmap ->
                 AsyncImage(
                     model = bitmap,
                     contentDescription = "",
@@ -139,7 +141,7 @@ fun ChatItem(promptResponse: Pair<String?, Bitmap?>) {
                 )
             }
             Text(
-                text = promptResponse.first ?: "",
+                text = promptResponse.message ?: "",
                 modifier = Modifier.padding(16.dp)
             )
         }
@@ -147,7 +149,7 @@ fun ChatItem(promptResponse: Pair<String?, Bitmap?>) {
 }
 
 @Composable
-fun ChatListScreen(chatItems: List<Pair<String?, Bitmap?>>) {
+fun ChatListScreen(chatItems: List<ChatItemModel>) {
     LazyColumn {
         items(chatItems) { item ->
             ChatItem(promptResponse = item)

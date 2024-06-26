@@ -14,6 +14,7 @@ import com.alpharays.mymedjarvisfma.jarvischat.di.JarvisChatModule
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.alpharays.mymedjarvisfma.data.Response
+import com.alpharays.mymedjarvisfma.model.ChatItemModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,8 +31,8 @@ class JarvisChatViewModel @Inject constructor(
     private val imageRequestBuilder = ImageRequest.Builder(context = application)
     private val imageLoader = ImageLoader.Builder(application).build()
 
-    private val _promptResponse = MutableStateFlow<Response<Pair<String?, Bitmap?>>?>(null)
-    val promptResponse: StateFlow<Response<Pair<String?, Bitmap?>>?>
+    private val _promptResponse = MutableStateFlow<Response<ChatItemModel>?>(null)
+    val promptResponse: StateFlow<Response<ChatItemModel>?>
         get() = _promptResponse
 
     fun sendPrompt(message: String?, pickUri: MutableList<Uri>) {
@@ -54,7 +55,8 @@ class JarvisChatViewModel @Inject constructor(
             if (!message.isNullOrBlank() && bitmaps.isEmpty()) {
                 val contents = geminiPro.startChat().sendMessage(message)
                 contents.text?.let {
-                    _promptResponse.value = Response.Success(Pair(it, null))
+                    val chatItemModel = ChatItemModel(message = it, isBot = true, image = null)
+                    _promptResponse.value = Response.Success(chatItemModel)
                 }
             } else if (bitmaps.isNotEmpty()) {
                 val bitmap = bitmaps.firstOrNull()
@@ -69,7 +71,8 @@ class JarvisChatViewModel @Inject constructor(
                 geminiProVision.generateContentStream(inputContent).collect {
                     output += it.text
                 }
-                _promptResponse.value = Response.Success(Pair(output, null))
+                val chatItemModel = ChatItemModel(message = output, isBot = true, image = null)
+                _promptResponse.value = Response.Success(chatItemModel)
             } else {
                 _promptResponse.value = Response.Failure("Error")
             }
