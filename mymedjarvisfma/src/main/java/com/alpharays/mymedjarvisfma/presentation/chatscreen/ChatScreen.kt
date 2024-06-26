@@ -48,6 +48,7 @@ fun ChatScreen(
         onMessageSent = { inputText, selectedItems ->
             viewModel.sendPrompt(message = inputText, pickUri = selectedItems)
             selectedItems.clear()
+            chatItems.add(Pair(inputText, null))
         }
     )
 }
