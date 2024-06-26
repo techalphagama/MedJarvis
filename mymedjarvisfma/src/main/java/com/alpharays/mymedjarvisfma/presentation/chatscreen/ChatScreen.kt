@@ -6,15 +6,21 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -27,10 +33,16 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import com.alpharays.mymedjarvisfma.MedJarvisRouter
+import com.alpharays.mymedjarvisfma.R
 import com.alpharays.mymedjarvisfma.data.Response
 import com.alpharays.mymedjarvisfma.jarvischat.JarvisChatViewModel
 import com.alpharays.mymedjarvisfma.model.ChatItemModel
@@ -58,11 +70,12 @@ fun ChatScreen(
                 viewModel.sendPrompt(message = inputText, pickUri = selectedItems)
                 selectedItems.clear()
                 val bitmap = getBitmapFromUri(selectedImageUri)
-                val chatItemModel = ChatItemModel(message = inputText, isBot = true, image = bitmap)
+                val chatItemModel =
+                    ChatItemModel(message = inputText, isBot = false, image = bitmap)
                 chatItems.add(chatItemModel)
             } else {
                 viewModel.sendPrompt(message = inputText, pickUri = selectedItems)
-                val chatItemModel = ChatItemModel(message = inputText, isBot = true, image = null)
+                val chatItemModel = ChatItemModel(message = inputText, isBot = false, image = null)
                 chatItems.add(chatItemModel)
             }
         }
@@ -93,15 +106,14 @@ fun MainScreen(
     Scaffold(
         topBar = { AppBars() },
         bottomBar = {
-            UserInput(
-                onMessageSent = onMessageSent
-            )
+            UserInput(onMessageSent = onMessageSent)
         }
-    ) {
+    ) { innerPadding ->
         Box(
             modifier = modifier
+                .padding(innerPadding)
+                .padding(10.dp)
                 .fillMaxSize()
-                .padding(it)
         ) {
             ChatListScreen(chatItems = chatItems)
             if (promptResponse is Response.Loading) {
@@ -110,6 +122,7 @@ fun MainScreen(
         }
     }
 }
+
 
 @Composable
 fun LoadingScreen() {
@@ -123,41 +136,79 @@ fun LoadingScreen() {
 
 @Composable
 fun ChatItem(promptResponse: ChatItemModel) {
-    Card(
+    Row(
         modifier = Modifier
-            .padding(vertical = 8.dp)
-            .fillMaxWidth(),
-        shape = MaterialTheme.shapes.large
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp, vertical = 4.dp),
+        horizontalArrangement = if (promptResponse.isBot) Arrangement.Start else Arrangement.End
     ) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+        if (promptResponse.isBot) {
+            Image(
+                painter = painterResource(id = R.drawable.close_bottom_sheet_icon), // Replace with your bot image resource
+                contentDescription = "Bot Image",
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(end = 8.dp)
+                    .clip(CircleShape)
+                    .background(Color.Gray)
+            )
+        }
+
+        Card(
+            modifier = Modifier
+                .background(if (promptResponse.isBot) Color.Red else Color.Yellow)
+                .padding(8.dp),
+            shape = MaterialTheme.shapes.large,
         ) {
-            promptResponse.image?.let { bitmap ->
-                AsyncImage(
-                    model = bitmap,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .requiredSize(300.dp)
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(8.dp)
+            ) {
+                promptResponse.image?.let { bitmap ->
+                    AsyncImage(
+                        model = bitmap,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .requiredSize(300.dp)
+                    )
+                }
+                Text(
+                    text = promptResponse.message ?: "",
+                    modifier = Modifier.padding(16.dp)
                 )
             }
-            Text(
-                text = promptResponse.message ?: "",
-                modifier = Modifier.padding(16.dp)
+        }
+
+        if (!promptResponse.isBot) {
+            Image(
+                painter = painterResource(id = R.drawable.close_bottom_sheet_icon), // Replace with your user image resource
+                contentDescription = "User Image",
+                modifier = Modifier
+                    .size(40.dp)
+                    .padding(start = 8.dp)
+                    .clip(CircleShape)
+                    .background(Color.Gray)
             )
         }
     }
 }
 
+
+
+
 @Composable
 fun ChatListScreen(chatItems: List<ChatItemModel>) {
-    LazyColumn {
+    LazyColumn(
+        contentPadding = PaddingValues(vertical = 2.dp)
+    ) {
         items(chatItems) { item ->
             ChatItem(promptResponse = item)
         }
     }
 }
+
 
 @Composable
 fun FailureScreen(errorMessage: String) {
