@@ -53,14 +53,16 @@ fun ChatScreen(
         promptResponse = promptResponse,
         onMessageSent = { inputText, selectedItems ->
             val selectedImageUri = selectedItems.firstOrNull()
-            val chatItemModel = ChatItemModel(message = inputText, isBot = true, image = null)
+
             if (selectedImageUri != null) {
                 viewModel.sendPrompt(message = inputText, pickUri = selectedItems)
                 selectedItems.clear()
                 val bitmap = getBitmapFromUri(selectedImageUri)
+                val chatItemModel = ChatItemModel(message = inputText, isBot = true, image = bitmap)
                 chatItems.add(chatItemModel)
             } else {
                 viewModel.sendPrompt(message = inputText, pickUri = selectedItems)
+                val chatItemModel = ChatItemModel(message = inputText, isBot = true, image = null)
                 chatItems.add(chatItemModel)
             }
         }
