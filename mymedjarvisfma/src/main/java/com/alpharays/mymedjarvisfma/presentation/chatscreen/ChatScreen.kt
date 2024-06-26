@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
@@ -86,7 +87,7 @@ fun LoadingScreen() {
 }
 
 @Composable
-fun SuccessScreen(promptResponse: Pair<String?, Bitmap?>) {
+fun ChatItem(promptResponse: Pair<String?, Bitmap?>) {
     Card(
         modifier = Modifier
             .padding(vertical = 16.dp)
@@ -110,6 +111,16 @@ fun SuccessScreen(promptResponse: Pair<String?, Bitmap?>) {
                 text = promptResponse.first ?: "",
                 modifier = Modifier.padding(16.dp)
             )
+        }
+    }
+}
+
+@Composable
+fun ChatListScreen(items: List<Pair<String?, Bitmap?>>) {
+    LazyColumn {
+
+        item {
+            items.forEach { ChatItem(promptResponse = it) }
         }
     }
 }
