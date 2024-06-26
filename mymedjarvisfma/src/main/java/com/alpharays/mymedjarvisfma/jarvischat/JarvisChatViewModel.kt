@@ -69,7 +69,7 @@ class JarvisChatViewModel @Inject constructor(
                 geminiProVision.generateContentStream(inputContent).collect {
                     output += it.text
                 }
-                _promptResponse.value = Response.Success(Pair(output, bitmap))
+                _promptResponse.value = Response.Success(Pair(output, null))
             } else {
                 _promptResponse.value = Response.Failure("Error")
             }
