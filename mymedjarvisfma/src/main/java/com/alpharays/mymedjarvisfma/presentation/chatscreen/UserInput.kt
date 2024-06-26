@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -56,6 +57,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
@@ -160,7 +162,6 @@ private fun UserInputText(
     textFieldValue: TextFieldValue,
     onMessageSent: (String) -> Unit,
 ) {
-    val a11ylabel = "textfield_desc"
     Box(modifier = modifier.fillMaxWidth()) {
         UserInputTextField(
             textFieldValue,
@@ -180,52 +181,32 @@ private fun UserInputTextField(
     modifier: Modifier = Modifier,
 ) {
 
-
-    Row(
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+    Box(
         modifier = modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(20.dp))
-            .background(Color.White)
-            .height(40.dp)
+            .fillMaxWidth() // Set the width to match parent
+            .background(Color.White, shape = RoundedCornerShape(8.dp))
+            .clip(RoundedCornerShape(8.dp))
+            .padding(12.dp) // Adjust the padding as needed
     ) {
-        Box(contentAlignment = Alignment.CenterStart, modifier = modifier.weight(1f)) {
-            BasicTextField(
-                value = textFieldValue,
-                onValueChange = {
-                    onTextChanged(it)
-                },
-                modifier = modifier
-                    .padding(start = 12.dp, end = 8.dp),
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = keyboardType,
-                    imeAction = ImeAction.Send,
-                ),
-                keyboardActions = KeyboardActions(
-                    onSend = {
-                        onMessageSent(textFieldValue.text)
-                    }
-                ),
-                maxLines = 1,
-                textStyle = TextStyle(color = Color.Black)
-            )
-            Row(modifier = modifier.fillMaxSize()) {
-                Box(
-                    modifier = modifier
-                        .fillMaxSize()
-
-                )
-            }
-            if (textFieldValue.text.isEmpty()) {
-                Text(
-                    modifier = Modifier
-                        .padding(start = 12.dp),
-                    text = "Aa",
-                )
-            }
-        }
+        BasicTextField(
+            value = textFieldValue,
+            onValueChange = { onTextChanged(it) },
+            modifier = Modifier.fillMaxWidth(), // Fill the width within the Box
+            keyboardOptions = KeyboardOptions(
+                keyboardType = keyboardType,
+                imeAction = ImeAction.Send,
+            ),
+            keyboardActions = KeyboardActions(
+                onSend = {
+                    onMessageSent(textFieldValue.toString())
+                }
+            ),
+            maxLines = 1,
+            textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
+        )
     }
+
+
 }
 
 
