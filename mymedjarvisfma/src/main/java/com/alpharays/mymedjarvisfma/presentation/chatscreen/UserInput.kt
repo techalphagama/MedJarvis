@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -238,13 +239,15 @@ fun UserInputSelector(
 ) {
     Row(
         modifier = modifier
-            .wrapContentHeight(),
-        verticalAlignment = Alignment.CenterVertically
+            .wrapContentHeight()
+            .wrapContentWidth(),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(0.dp)
     ) {
         SelectorButton(
             onClick = onClickCamera,
             icon = Icons.Filled.Camera,
-            description = "capture_photo_desc" // Update description for camera
+            description = "capture_photo_desc"
         )
         SelectorButton(
             onClick = onClickGallery,
@@ -268,8 +271,7 @@ fun SelectorButton(
             icon,
             tint = LocalContentColor.current,
             modifier = modifier
-                .padding(8.dp)
-                .size(56.dp),
+                .size(50.dp),
             contentDescription = description
         )
     }
@@ -281,12 +283,11 @@ fun SendMessage(
 ) {
     IconButton(
         onClick = onMessageSent,
-        modifier = Modifier.size(48.dp) // Adjust size if needed
     ) {
         Icon(
             imageVector = Icons.Filled.Send,
             tint = Color.Blue,
-            modifier = Modifier.size(24.dp), // Adjust inner icon size if needed
+            modifier = Modifier.size(50.dp), // Adjust inner icon size if needed
             contentDescription = "Send message"
         )
     }
