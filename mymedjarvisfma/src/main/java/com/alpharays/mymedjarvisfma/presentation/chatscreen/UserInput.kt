@@ -1,7 +1,5 @@
 package com.alpharays.mymedjarvisfma.presentation.chatscreen
 
-import android.Manifest
-import android.content.pm.PackageManager
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -19,7 +17,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -48,6 +45,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
@@ -58,7 +57,6 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import coil.compose.AsyncImage
 import com.alpharays.mymedjarvisfma.data.UriCustomSaver
@@ -106,7 +104,30 @@ fun UserInput(
         mutableStateOf(TextFieldValue())
     }
 
-    Surface(tonalElevation = 2.dp, contentColor = MaterialTheme.colorScheme.secondary) {
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+            .shadow(6.dp)// Adjusts height based on content
+            .background(
+                Brush.verticalGradient(
+                    colors = listOf(
+                        Color.Cyan,
+                        Color.Magenta
+                    ),
+                    startY = 0f,
+                    endY = Float.POSITIVE_INFINITY
+                ),
+                shape = RoundedCornerShape(8.dp)
+
+            )
+            .clip(
+                RoundedCornerShape(8.dp)
+            )
+
+
+    ) {
         Column {
             Row(
                 modifier = modifier
@@ -119,12 +140,19 @@ fun UserInput(
                         imageUri = FileProvider.getUriForFile(
                             context,
                             "${context.packageName}.fileprovider",
-                            File(context.cacheDir, "temp_image_${UUID.randomUUID()}.jpg")
+                            File(
+                                context.cacheDir,
+                                "temp_image_${UUID.randomUUID()}.jpg"
+                            )
                         )
                         takePictureLauncher.launch(imageUri)
                     },
                     onClickGallery = {
-                        pickMediaLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        pickMediaLauncher.launch(
+                            PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly
+                            )
+                        )
                     }
                 )
                 UserInputText(
@@ -146,6 +174,7 @@ fun UserInput(
             SelectorExpanded(imageUris = imageUris)
         }
     }
+
 }
 
 @ExperimentalFoundationApi
