@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -154,11 +155,11 @@ fun ChatItem(promptResponse: ChatItemModel) {
             )
         }
 
-        Card(
+        Box(
             modifier = Modifier
-                .background(if (promptResponse.isBot) Color.Red else Color.Yellow)
-                .padding(8.dp),
-            shape = MaterialTheme.shapes.large,
+                .background(if (promptResponse.isBot) Color.Red else Color.Yellow, shape = RoundedCornerShape(16.dp))
+                .padding(8.dp)
+                .clip(RoundedCornerShape(16.dp))
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -195,19 +196,17 @@ fun ChatItem(promptResponse: ChatItemModel) {
     }
 }
 
-
-
-
 @Composable
 fun ChatListScreen(chatItems: List<ChatItemModel>) {
     LazyColumn(
-        contentPadding = PaddingValues(vertical = 2.dp)
+        contentPadding = PaddingValues(vertical = 8.dp)
     ) {
         items(chatItems) { item ->
             ChatItem(promptResponse = item)
         }
     }
 }
+
 
 
 @Composable
