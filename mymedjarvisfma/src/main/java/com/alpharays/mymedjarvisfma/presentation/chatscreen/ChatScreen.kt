@@ -1,17 +1,15 @@
 package com.alpharays.mymedjarvisfma.presentation.chatscreen
 
+import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,67 +18,38 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Camera
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.input.TextFieldValue
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.content.FileProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.alpharays.mymedjarvisfma.MedJarvisRouter
 import com.alpharays.mymedjarvisfma.R
 import com.alpharays.mymedjarvisfma.data.Response
-import com.alpharays.mymedjarvisfma.data.UriCustomSaver
 import com.alpharays.mymedjarvisfma.jarvischat.JarvisChatViewModel
 import com.alpharays.mymedjarvisfma.model.ChatItemModel
-import java.io.File
 import java.io.InputStream
-import java.util.UUID
 
 @Composable
 fun ChatScreen(
@@ -135,12 +104,11 @@ fun MainScreen(
     chatItems: List<ChatItemModel>,
     promptResponse: Response<ChatItemModel>?,
     onMessageSent: (String, MutableList<Uri>) -> Unit,
-    modifier: Modifier = Modifier
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White) // This ensures the background color before loading the wallpaper
+            .background(Color.White)
     ) {
         Image(
             painter = painterResource(id = R.drawable.mymedjarvisfma_chat_wallpaper),
@@ -150,7 +118,9 @@ fun MainScreen(
         )
 
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 40.dp)
         ) {
             ChatTopBar()
 
@@ -170,6 +140,7 @@ fun MainScreen(
 
 @Composable
 fun ChatTopBar() {
+    val context = LocalContext.current
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -177,19 +148,28 @@ fun ChatTopBar() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.mymedjarvisfma_bot),
+            painter = painterResource(id = R.drawable.mymedjarvis_ic_back),
             contentDescription = "Back",
             modifier = Modifier
-                .size(24.dp)
-                .padding(end = 8.dp)
+                .size(30.dp)
+                .padding(end = 10.dp)
+                .clickable {  (context as? Activity)?.finish() },
+            tint = Color.White,
+
         )
-        Text(text = "Chat with Yeti", style = MaterialTheme.typography.headlineMedium)
+        Text(
+            text = "Chat with Medris",
+            style = MaterialTheme.typography.headlineLarge,
+            color = Color.White
+        )
         Spacer(modifier = Modifier.weight(1f))
         Icon(
             painter = painterResource(id = R.drawable.mymedjarvisfma_bot),
             contentDescription = "More",
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(24.dp),
+            tint = Color.White // This sets the tint color to white
         )
+
     }
 }
 
