@@ -233,6 +233,7 @@ fun ChatItem(promptResponse: ChatItemModel) {
 
         Box(
             modifier = Modifier
+                .weight(1f)
                 .padding(
                     start = if (promptResponse.isBot) 10.dp else 0.dp,
                     end = if (promptResponse.isBot) 0.dp else 10.dp
@@ -242,7 +243,7 @@ fun ChatItem(promptResponse: ChatItemModel) {
                     shape = RoundedCornerShape(16.dp)
                 )
                 .padding(8.dp)
-                .clip(RoundedCornerShape(16.dp))
+                .clip(RoundedCornerShape(16.dp)),
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
