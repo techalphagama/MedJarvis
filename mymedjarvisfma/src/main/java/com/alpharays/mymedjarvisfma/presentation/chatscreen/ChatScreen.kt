@@ -226,7 +226,7 @@ fun ChatItem(promptResponse: ChatItemModel) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp),
+            .padding(horizontal = 8.dp, vertical = 15.dp),
         horizontalArrangement = if (promptResponse.isBot) Arrangement.Start else Arrangement.End
     ) {
         if (promptResponse.isBot) {
