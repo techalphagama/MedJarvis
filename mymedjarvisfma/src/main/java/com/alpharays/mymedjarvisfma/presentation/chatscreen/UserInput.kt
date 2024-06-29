@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -64,14 +63,13 @@ import com.alpharays.mymedjarvisfma.data.UriCustomSaver
 import java.io.File
 import java.util.UUID
 
-@OptIn(ExperimentalFoundationApi::class)
 @Preview
 @Composable
 fun UserInputPreview() {
     UserInput(onMessageSent = { it, it1 -> })
 }
 
-@ExperimentalFoundationApi
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UserInput(
     onMessageSent: (String, MutableList<Uri>) -> Unit,
@@ -92,7 +90,6 @@ fun UserInput(
         }
     }
 
-    // Activity result launcher for taking picture from camera
     val takePictureLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture()
     ) { isTaken ->
@@ -105,12 +102,11 @@ fun UserInput(
         mutableStateOf(TextFieldValue())
     }
 
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .wrapContentHeight()
-            .shadow(6.dp)// Adjusts height based on content
+            .shadow(6.dp)
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
@@ -121,13 +117,8 @@ fun UserInput(
                     endY = Float.POSITIVE_INFINITY
                 ),
                 shape = RoundedCornerShape(8.dp)
-
             )
-            .clip(
-                RoundedCornerShape(8.dp)
-            )
-
-
+            .clip(RoundedCornerShape(8.dp))
     ) {
         Column {
             Row(
@@ -163,7 +154,7 @@ fun UserInput(
                         onMessageSent(textState.text, imageUris)
                         textState = TextFieldValue()
                     },
-                    modifier = Modifier.weight(1f) // Ensure it takes available space
+                    modifier = Modifier.weight(1f)
                 )
                 SendMessage(
                     onMessageSent = {
@@ -175,8 +166,8 @@ fun UserInput(
             SelectorExpanded(imageUris = imageUris)
         }
     }
-
 }
+
 
 @ExperimentalFoundationApi
 @Composable

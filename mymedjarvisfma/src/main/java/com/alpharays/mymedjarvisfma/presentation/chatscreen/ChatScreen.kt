@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
@@ -134,10 +135,16 @@ fun MainScreen(
                 }
             }
 
-            ChatBottomBar(onMessageSent = onMessageSent)
+            ChatBottomBar(
+                onMessageSent = onMessageSent,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .imePadding() // Ensure the bottom bar adjusts for the keyboard
+            )
         }
     }
 }
+
 
 @Composable
 fun ChatTopBar() {
@@ -182,12 +189,16 @@ fun ChatTopBar() {
 
 @ExperimentalFoundationApi
 @Composable
-fun ChatBottomBar(onMessageSent: (String, MutableList<Uri>) -> Unit) {
+fun ChatBottomBar(
+    onMessageSent: (String, MutableList<Uri>) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(8.dp)
             .background(Color.White, RoundedCornerShape(16.dp))
+            .imePadding() // Ensure the bottom bar adjusts for the keyboard
     ) {
         UserInput(
             onMessageSent = onMessageSent,
@@ -197,6 +208,7 @@ fun ChatBottomBar(onMessageSent: (String, MutableList<Uri>) -> Unit) {
         )
     }
 }
+
 
 @Composable
 fun LoadingScreen() {
