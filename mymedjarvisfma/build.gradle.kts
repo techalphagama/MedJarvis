@@ -115,6 +115,9 @@ dependencies {
     //geminiapi
     implementation("com.google.ai.client.generativeai:generativeai:0.1.1")
 
+    //material
+    implementation("androidx.compose.material:material:1.6.3")
+
 }
 
 // Allow references to generated code
