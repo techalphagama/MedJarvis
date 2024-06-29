@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -153,10 +154,10 @@ fun ChatTopBar() {
             modifier = Modifier
                 .size(30.dp)
                 .padding(end = 10.dp)
-                .clickable {  (context as? Activity)?.finish() },
+                .clickable { (context as? Activity)?.finish() },
             tint = Color.White,
 
-        )
+            )
         Text(
             text = "Chat with Medris",
             style = MaterialTheme.typography.headlineLarge,
@@ -166,7 +167,13 @@ fun ChatTopBar() {
         Icon(
             painter = painterResource(id = R.drawable.mymedjarvisfma_bot),
             contentDescription = "More",
-            modifier = Modifier.size(24.dp),
+            modifier = Modifier
+                .size(24.dp)
+                .clickable {
+                    Toast
+                        .makeText(context, "Coming soon, Sabar kro ji", Toast.LENGTH_SHORT)
+                        .show()
+                },
             tint = Color.White // This sets the tint color to white
         )
 
@@ -214,15 +221,22 @@ fun ChatItem(promptResponse: ChatItemModel) {
                 painter = painterResource(id = R.drawable.mymedjarvisfma_bot), // Replace with your bot image resource
                 contentDescription = "Bot Image",
                 modifier = Modifier
-                    .size(40.dp)
-                    .padding(end = 8.dp)
+                    .size(50.dp)
+                    .padding(1.dp)
+                    .background(Color.White, CircleShape)
+                    .padding(5.dp)
                     .clip(CircleShape)
-                    .background(Color.Gray)
+
+
             )
         }
 
         Box(
             modifier = Modifier
+                .padding(
+                    start = if (promptResponse.isBot) 10.dp else 0.dp,
+                    end = if (promptResponse.isBot) 0.dp else 10.dp
+                )
                 .background(
                     if (promptResponse.isBot) Color(0xFFe0f7fa) else Color(0xFFffe0b2), // Adjust the colors as needed
                     shape = RoundedCornerShape(16.dp)
@@ -246,8 +260,13 @@ fun ChatItem(promptResponse: ChatItemModel) {
                 }
                 Text(
                     text = promptResponse.message ?: "",
-                    modifier = Modifier.padding(4.dp)
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .align(
+                            Alignment.Start
+                        )
                 )
+
             }
         }
 
@@ -256,10 +275,11 @@ fun ChatItem(promptResponse: ChatItemModel) {
                 painter = painterResource(id = R.drawable.mymedjarvisfma_user), // Replace with your user image resource
                 contentDescription = "User Image",
                 modifier = Modifier
-                    .size(40.dp)
-                    .padding(start = 8.dp)
+                    .size(50.dp)
+                    .padding(1.dp)
+                    .background(Color.White, CircleShape)
+                    .padding(5.dp)
                     .clip(CircleShape)
-                    .background(Color.Gray)
             )
         }
     }
