@@ -254,7 +254,9 @@ fun ChatItem(promptResponse: ChatItemModel) {
                     AsyncImage(
                         model = bitmap,
                         contentDescription = "",
+                        contentScale = ContentScale.Crop,
                         modifier = Modifier
+                            .fillMaxSize()
                             .padding(4.dp)
                             .requiredSize(200.dp) // Adjust size as needed
                     )
