@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -238,14 +239,11 @@ fun ChatItem(promptResponse: ChatItemModel) {
                     .background(Color.White, CircleShape)
                     .padding(5.dp)
                     .clip(CircleShape)
-
-
             )
         }
 
         Box(
             modifier = Modifier
-                .weight(1f)
                 .padding(
                     start = if (promptResponse.isBot) 10.dp else 0.dp,
                     end = if (promptResponse.isBot) 0.dp else 10.dp
@@ -254,12 +252,13 @@ fun ChatItem(promptResponse: ChatItemModel) {
                     if (promptResponse.isBot) Color(0xFFe0f7fa) else Color(0xFFffe0b2), // Adjust the colors as needed
                     shape = RoundedCornerShape(16.dp)
                 )
-                .padding(8.dp)
-                .clip(RoundedCornerShape(16.dp)),
+                .clip(RoundedCornerShape(16.dp))
+                .wrapContentWidth(Alignment.Start)
+                .weight(1f, false) // Allow Box to take up only the required space
         ) {
             Column(
                 verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+                horizontalAlignment = Alignment.Start,
                 modifier = Modifier.padding(8.dp)
             ) {
                 promptResponse.image?.let { bitmap ->
@@ -268,20 +267,14 @@ fun ChatItem(promptResponse: ChatItemModel) {
                         contentDescription = "",
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
-                            .fillMaxSize()
                             .padding(4.dp)
                             .requiredSize(200.dp) // Adjust size as needed
                     )
                 }
                 Text(
                     text = promptResponse.message ?: "",
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .align(
-                            Alignment.Start
-                        )
+                    modifier = Modifier.padding(4.dp)
                 )
-
             }
         }
 
@@ -299,6 +292,10 @@ fun ChatItem(promptResponse: ChatItemModel) {
         }
     }
 }
+
+
+
+
 
 @Composable
 fun ChatListScreen(chatItems: List<ChatItemModel>) {
