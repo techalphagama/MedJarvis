@@ -54,7 +54,7 @@ class JarvisChatViewModel @Inject constructor(
             }
 
             if (!message.isNullOrBlank() && bitmaps.isEmpty()) {
-                val contents = geminiPro.startChat().sendMessage(message)
+                val contents = geminiPro.startChat().sendMessage(message + "\n" + getUserMessageScript())
                 contents.text?.let {
                     val chatItemModel = ChatItemModel(message = it, isBot = true, image = null)
                     _promptResponse.value = Response.Success(chatItemModel)

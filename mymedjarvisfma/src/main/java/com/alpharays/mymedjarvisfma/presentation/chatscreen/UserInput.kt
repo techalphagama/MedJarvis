@@ -216,7 +216,6 @@ private fun UserInputTextField(
                     onMessageSent(textFieldValue.text)
                 }
             ),
-            maxLines = 1,
             textStyle = TextStyle(color = Color.Black, fontSize = 16.sp),
         )
     }
