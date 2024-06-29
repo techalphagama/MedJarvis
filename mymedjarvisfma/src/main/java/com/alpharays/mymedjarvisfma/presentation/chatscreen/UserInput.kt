@@ -114,8 +114,8 @@ fun UserInput(
             .background(
                 Brush.verticalGradient(
                     colors = listOf(
-                        Color.Cyan,
-                        Color.Magenta
+                        Color(0xFFF144EF),
+                        Color(0xFFFD7365)
                     ),
                     startY = 0f,
                     endY = Float.POSITIVE_INFINITY
@@ -269,7 +269,7 @@ fun SelectorButton(
     ) {
         Icon(
             icon,
-            tint = LocalContentColor.current,
+            tint = Color.White,
             modifier = modifier
                 .size(50.dp),
             contentDescription = description
