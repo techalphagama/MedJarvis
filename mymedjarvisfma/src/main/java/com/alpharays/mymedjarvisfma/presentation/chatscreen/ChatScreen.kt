@@ -294,9 +294,6 @@ fun ChatItem(promptResponse: ChatItemModel) {
 }
 
 
-
-
-
 @Composable
 fun ChatListScreen(chatItems: List<ChatItemModel>) {
     LazyColumn(
