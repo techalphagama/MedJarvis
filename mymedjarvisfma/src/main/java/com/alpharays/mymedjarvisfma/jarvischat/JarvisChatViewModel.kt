@@ -15,6 +15,7 @@ import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.content
 import com.alpharays.mymedjarvisfma.data.Response
 import com.alpharays.mymedjarvisfma.model.ChatItemModel
+import com.alpharays.mymedjarvisfma.script.MedrisScript.getUserMessageScript
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -64,7 +65,7 @@ class JarvisChatViewModel @Inject constructor(
                     bitmaps.forEach {
                         image(bitmap ?: compressBitmap(it))
                     }
-                    text(if (message.isNullOrBlank()) "If the image is related to healthcare or medicine then please describe about it else please say that it is not related to healthcare or medicine" else message)
+                    text(message + "\n" + getUserMessageScript())
                 }
 
                 var output = ""
