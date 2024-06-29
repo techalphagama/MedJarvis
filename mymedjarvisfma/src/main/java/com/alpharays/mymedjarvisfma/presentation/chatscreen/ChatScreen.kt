@@ -179,7 +179,7 @@ fun ChatTopBar() {
                 .size(24.dp)
                 .clickable {
                     Toast
-                        .makeText(context, "Coming soon, Sabar kro ji", Toast.LENGTH_SHORT)
+                        .makeText(context, "Voice assistant is coming soon", Toast.LENGTH_SHORT)
                         .show()
                 },
             tint = Color.White // This sets the tint color to white
