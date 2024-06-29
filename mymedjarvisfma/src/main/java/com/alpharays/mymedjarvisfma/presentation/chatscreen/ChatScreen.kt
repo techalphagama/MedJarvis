@@ -7,10 +7,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.tween
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -23,29 +20,36 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.BlurredEdgeTreatment
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -131,7 +135,11 @@ fun MainScreen(
                 .fillMaxSize()
                 .padding(top = 40.dp)
         ) {
-            ChatTopBar()
+            ChatTopBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .imePadding()
+            )
 
             Box(
                 modifier = Modifier.weight(1f)
@@ -154,44 +162,95 @@ fun MainScreen(
 
 
 @Composable
-fun ChatTopBar() {
+fun ChatTopBar(modifier: Modifier) {
     val context = LocalContext.current
-    Row(
-        modifier = Modifier
+
+    Column(
+        modifier = modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        verticalAlignment = Alignment.CenterVertically
+            .padding(8.dp)
+            .imePadding() // Ensure the bottom bar adjusts for the keyboard
     ) {
-        Icon(
-            painter = painterResource(id = R.drawable.mymedjarvis_ic_back),
-            contentDescription = "Back",
+        Card(
             modifier = Modifier
-                .size(30.dp)
-                .padding(end = 10.dp)
-                .clickable { (context as? Activity)?.finish() },
-            tint = Color.White,
+                .padding(vertical = 16.dp)
+                .fillMaxWidth()
+                .height(60.dp),
+            backgroundColor = Color(0xFFFFFF),
+            border = BorderStroke(1.dp, color = Color(0x25FFFFFF)),
+            elevation = 0.dp,
+            shape = RoundedCornerShape(16.dp)
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .alpha(1f)
+                    .blur(
+                        radius = 28.dp,
+                        edgeTreatment = BlurredEdgeTreatment.Unbounded
+                    )
+                    .background(
+                        Brush.radialGradient(
+                            listOf(
+                                Color(0x12FFFFFF),
+                                Color(0xDFFFFFF),
+                                Color(0x9FFFFFFF)
 
-            )
-        Text(
-            text = "Chat with Medris",
-            style = MaterialTheme.typography.headlineLarge,
-            color = Color.White
-        )
-        Spacer(modifier = Modifier.weight(1f))
-        Icon(
-            painter = painterResource(id = R.drawable.mymedjarvisfma_bot),
-            contentDescription = "More",
-            modifier = Modifier
-                .size(24.dp)
-                .clickable {
-                    Toast
-                        .makeText(context, "Voice assistant is coming soon", Toast.LENGTH_SHORT)
-                        .show()
-                },
-            tint = Color.White // This sets the tint color to white
-        )
+                            ),
+                            radius = 2200f,
+                            center = Offset.Infinite
+                        )
+                    )
 
+
+            ) {
+
+            }
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 15.dp, end = 15.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.mymedjarvis_ic_back),
+                    contentDescription = "Back",
+                    modifier = Modifier
+                        .size(30.dp)
+                        .padding(end = 10.dp)
+                        .clickable { (context as? Activity)?.finish() },
+                    tint = Color.White,
+
+                    )
+                Text(
+                    text = "Medris",
+                    style = MaterialTheme.typography.headlineLarge,
+                    color = Color.White
+                )
+                Spacer(modifier = Modifier.weight(1f))
+                Icon(
+                    painter = painterResource(id = R.drawable.mymedjarvisfma_bot),
+                    contentDescription = "More",
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clickable {
+                            Toast
+                                .makeText(
+                                    context,
+                                    "Voice assistant is coming soon",
+                                    Toast.LENGTH_SHORT
+                                )
+                                .show()
+                        },
+                    tint = Color.White // This sets the tint color to white
+                )
+
+            }
+        }
     }
+
+
 }
 
 @ExperimentalFoundationApi
