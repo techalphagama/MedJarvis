@@ -113,7 +113,7 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.4.0")
 
     //geminiapi
-    implementation("com.google.ai.client.generativeai:generativeai:0.1.1")
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
 
     //material
     implementation("androidx.compose.material:material:1.6.3")

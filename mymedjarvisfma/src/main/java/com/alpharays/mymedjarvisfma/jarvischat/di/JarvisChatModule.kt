@@ -29,7 +29,7 @@ object JarvisChatModule {
     @[Provides Singleton GeminiPro]
     fun provideGemini(): GenerativeModel {
         return GenerativeModel(
-            modelName = "gemini-pro",
+            modelName = "gemini-1.5-flash",
             apiKey = API_KEY,
             safetySettings = listOf(
                 harassment, hateSpeech
@@ -41,7 +41,7 @@ object JarvisChatModule {
     @[Provides Singleton GeminiProVision]
     fun provideGeminiVision(): GenerativeModel {
         return GenerativeModel(
-            modelName = "gemini-pro-vision",
+            modelName = "gemini-1.5-flash",
             apiKey = API_KEY,
             safetySettings = listOf(
                 harassment,
