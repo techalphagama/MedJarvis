@@ -133,7 +133,7 @@ afterEvaluate {
 
                 groupId = "com.alpharays.mymedjarvisfma"
                 artifactId = "mymedjarvisfma"
-                version = "0.0.1-beta"
+                version = "0.0.1-release"
             }
         }
     }
