@@ -1,9 +1,6 @@
 package com.alpharays.mymedjarvisfma.data
 
-/**
- * @Author: Vinay
- * @Date: 15-01-2024
- */
+
 sealed class Response<out T> {
     object Loading : Response<Nothing>()
 

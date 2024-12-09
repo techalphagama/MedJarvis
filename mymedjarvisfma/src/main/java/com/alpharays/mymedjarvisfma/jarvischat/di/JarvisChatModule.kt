@@ -1,7 +1,5 @@
 package com.alpharays.mymedjarvisfma.jarvischat.di
 
-import android.app.Application
-import android.content.Context
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.HarmCategory

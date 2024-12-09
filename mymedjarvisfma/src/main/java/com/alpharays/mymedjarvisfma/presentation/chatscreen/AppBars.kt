@@ -7,10 +7,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 
-/**
- * @Author: Vinay
- * @Date: 15-01-2024
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppBars(title: String = "Jarvis") {
