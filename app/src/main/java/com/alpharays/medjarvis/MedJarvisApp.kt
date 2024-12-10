@@ -9,6 +9,5 @@ class MedJarvisApp : Application() {
     //set context
     override fun onCreate() {
         super.onCreate()
-        MedJarvisRouter.context = this
     }
 }

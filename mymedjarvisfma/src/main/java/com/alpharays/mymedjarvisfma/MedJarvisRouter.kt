@@ -6,8 +6,6 @@ import androidx.core.content.ContextCompat.startActivity
 
 
 object MedJarvisRouter {
-    var context: Context? = null
-
 
     fun startMedJarvisFma(context: Context) {
         val intent = Intent(context, MedJarvisActivity::class.java)
