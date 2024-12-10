@@ -68,6 +68,7 @@ import java.io.InputStream
 fun ChatScreen(
     viewModel: JarvisChatViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val promptResponse by viewModel.promptResponse.collectAsState()
     val chatItems = remember { mutableStateListOf<ChatItemModel>() }
 
@@ -85,7 +86,7 @@ fun ChatScreen(
             if (selectedImageUri != null) {
                 viewModel.sendPrompt(message = inputText, pickUri = selectedItems)
                 selectedItems.clear()
-                val bitmap = getBitmapFromUri(selectedImageUri)
+                val bitmap = getBitmapFromUri(context,selectedImageUri)
                 val chatItemModel =
                     ChatItemModel(message = inputText, isBot = false, image = bitmap)
                 chatItems.add(chatItemModel)
@@ -98,11 +99,10 @@ fun ChatScreen(
     )
 }
 
-private fun getBitmapFromUri(uri: Uri): Bitmap? {
-    val context: Context? = MedJarvisRouter.context
+private fun getBitmapFromUri(context: Context,uri: Uri): Bitmap? {
 
     return try {
-        val contentResolver: ContentResolver? = context?.contentResolver
+        val contentResolver: ContentResolver? = context.contentResolver
         val inputStream: InputStream? = contentResolver?.openInputStream(uri)
         BitmapFactory.decodeStream(inputStream)
     } catch (e: Exception) {

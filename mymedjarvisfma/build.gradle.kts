@@ -133,7 +133,7 @@ afterEvaluate {
 
                 groupId = "com.github.techalphagama"
                 artifactId = "MedJarvis"
-                version = "1.0.1-release"
+                version = "1.0.2-release"
             }
         }
     }
