@@ -131,9 +131,9 @@ afterEvaluate {
             create<MavenPublication>("release") {
                 from(components["release"])
 
-                groupId = "com.alpharays.mymedjarvisfma"
-                artifactId = "mymedjarvisfma"
-                version = "0.0.1-release"
+                groupId = "com.github.techalphagama"
+                artifactId = "MedJarvis"
+                version = "1.0.1-release"
             }
         }
     }
