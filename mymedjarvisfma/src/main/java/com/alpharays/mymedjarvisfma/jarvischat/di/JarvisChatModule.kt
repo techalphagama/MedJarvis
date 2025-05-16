@@ -50,7 +50,7 @@ object JarvisChatModule {
         )
     }
 
-    private const val API_KEY = "AIzaSyBWzKmCWhAGr9JC5xNA-hYIRfZnEhh5ZmU"
+    private const val API_KEY = "AIzaSyCZmmnn348FNVY6RmZdIUVqTr7H9ZTURRQ"
 
 
     @Qualifier
